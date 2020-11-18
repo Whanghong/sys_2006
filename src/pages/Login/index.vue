@@ -47,7 +47,15 @@
 </template>
 
 <script>
+import { login } from "@/api";
+import { mapMutations } from "vuex";
 export default {
+  // 登入逻辑
+  // 收集用户输入的信息
+  // 登入成功将后端返回的token存到本地
+  // 每次请求的时候携带token到请求头authorization
+  // 展示正确token校验的数据
+  // 校验不通过跳转到登录页
   data() {
     //jsDoc
     /**
@@ -83,12 +91,47 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(["SET_USERINFO"]),
     submitForm(formName) {
       // console.log(this.$refs[formName])
       this.$refs[formName].validate(valid => {
         if (valid) {
           //代表本地校验通过
-          alert("submit!");
+          //打开登入加载动画
+          const loading = this.$loading({
+            lock: true,
+            text: "正在登入",
+            spinner: "el-icon-loading",
+            background: "rgba(0, 0, 0, 0.7)"
+          });
+          // console.log(this.loginForm.username, this.loginForm.password);
+          let { username, password } = this.loginForm;
+          login(username, password)
+            .then(res => {
+              console.log(res);
+              //服务器响应关闭loading
+              setTimeout(() => {
+                loading.close();
+              }, 2000);
+              if (res.data.state) {
+                //用户名正确
+                localStorage.setItem("qf2006-token", res.data.token);
+                localStorage.setItem(
+                  "qf-userInfo",
+                  JSON.stringify(res.data.userInfo)
+                );
+                //更改vuex中state['userInfo']的值
+                this.SET_USERINFO(res.data.userInfo);
+                //跳转页面
+                this.$router.push("/");
+              } else {
+                //用户名或者密码错误
+                this.$message.error("用户名或密码错误");
+              }
+            })
+            .catch(err => {
+              console.log(err);
+            });
         } else {
           console.log("error submit!!");
           return false;
