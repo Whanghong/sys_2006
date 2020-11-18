@@ -1,17 +1,13 @@
 <template>
   <div class="home-page">
     <el-container>
-      <el-aside width="200px">
+      <el-aside width="200">
         <el-radio-group v-model="isCollapse" style="margin-bottom: 20px">
-          <el-radio-button :label="false">展开</el-radio-button>
-          <el-radio-button :label="true">收起</el-radio-button>
         </el-radio-group>
         <el-menu
-          default-active="1-4-1"
           class="el-menu-vertical-demo"
-          @open="handleOpen"
-          @close="handleClose"
           :collapse="isCollapse"
+          :router="true"
         >
           <el-submenu index="1">
             <!-- 侧边栏 -->
@@ -24,18 +20,8 @@
               <el-menu-item index="1-1">选项1</el-menu-item>
               <el-menu-item index="1-2">选项2</el-menu-item>
             </el-menu-item-group>
-            <el-menu-item-group title="分组2">
-              <el-menu-item index="1-3">选项3</el-menu-item>
-            </el-menu-item-group>
-            <el-submenu index="1-4">
-              <span slot="title">选项4</span>
-              <el-menu-item index="1-4">选项1</el-menu-item>
-            </el-submenu>
           </el-submenu>
-          <el-menu-item index="2">
-            <i class="el-icon-menu"></i>
-            <span slot="title">导航二</span>
-          </el-menu-item>
+          <el-menu-item index="/student">学员信息</el-menu-item>
         </el-menu>
       </el-aside>
       <el-container>
@@ -43,19 +29,20 @@
         <el-header>
           <el-row type="flex" class="row-bg" justify="space-between">
             <el-col :span="6">
-              <div class="grid-content bg-purple">图标</div>
+              <div class="grid-content bg-purple">
+                <i
+                  class="iconfont icon-shouqi"
+                  @click="isCollapse = !isCollapse"
+                ></i>
+                图标
+              </div>
             </el-col>
             <el-col :span="6">
               <div class="grid-content bg-purple-light">千峰管理系统</div>
             </el-col>
             <el-col :span="6">
               <div class="grid-content bg-purple">
-                <el-avatar
-                  class="tx"
-                  :size="40"
-                  fit="fit"
-                  :src="circleUrl"
-                ></el-avatar>
+                <el-avatar class="tx" :size="40" fit="fit" src="#"></el-avatar>
                 <span>欢迎您：</span>
                 <b class="nikeName">{{ userInfo.nickname }}</b>
                 <span class="quit" @click="quit">退出</span>
@@ -64,12 +51,19 @@
           </el-row>
         </el-header>
         <!-- 主体 -->
-        <el-main>Main</el-main>
+        <el-main>
+          <router-view></router-view>
+        </el-main>
       </el-container>
     </el-container>
   </div>
 </template>
-<style>
+<style scoped>
+.icon-shouqi {
+  color: hotpink;
+  font-size: 20px;
+  cursor: pointer;
+}
 .quit {
   color: hotpink;
   cursor: pointer;
@@ -152,7 +146,7 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-      isCollapse: true
+      isCollapse: false
     };
   },
   computed: {

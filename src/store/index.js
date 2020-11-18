@@ -4,7 +4,7 @@ import Vuex from "vuex";
 Vue.use(Vuex);
 
 //刷新页面会丢失用户信息，所有要从localStorage中取
-let userInfo = localStorage.getItem("qf-userInfo") || {};
+let userInfo = localStorage.getItem("qf-userInfo") || "{}";
 userInfo = JSON.parse(userInfo);
 
 export default new Vuex.Store({

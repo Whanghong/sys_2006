@@ -8,6 +8,8 @@ import "@/assets/style/el-reset.css";
 
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
+//引入iconfont
+import "./assets/iconfont/iconfont.css";
 Vue.use(ElementUI);
 //按需引入
 // import { Carousel, CarouselItem } from "element-ui";
@@ -34,6 +36,7 @@ router.beforeEach((to, from, next) => {
   }
 });
 
+import "./utils/recursionRoutes";
 new Vue({
   router,
   store,
